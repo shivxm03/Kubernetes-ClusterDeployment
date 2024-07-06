@@ -70,27 +70,29 @@ On the master node, initialize the Kubernetes cluster using Kubeadm. Run the fol
 ```bash
 sudo kubeadm init
 ```
+This command will initialize the Kubernetes control plane and generate a join token for adding worker nodes to the cluster.
 
-Next, set up kubectl for the regular user:
+![Screenshot 2024-07-05 045314](https://github.com/shivxm03/Kubernetes-ClusterDeployment/assets/157244434/9daeb93f-6354-43de-97a4-f02ea25d8c8e)
+
+Next up on the master node is to copy the kube/config file over to your $Home so you can execute kubectl commands:
 
 ```bash
 mkdir -p $HOME/.kube
 sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
 sudo chown $(id -u):$(id -g) $HOME/.kube/config
-```
-
-Step 4: Set Up Networking
-To enable pod networking within the cluster, install a CNI (Container Network Interface) plugin. Here we use Flannel:
-
-```bash
 kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
 kubectl apply -f https://raw.githubusercontent.com/flannel-io/flannel/v0.22.2/Documentation/k8s-old-manifests/kube-flannel-rbac.yml
 ```
 
+Step 4: Set Up Networking
+
+To enable pod networking within the cluster, you need to install a CNI (Container Network Interface) plugin. 
+Here, we have installed kubernetes-cni in step 2.
+
 Step 5: Join Worker Nodes to the Cluster
 Once the master node initialization is complete, you’ll receive a kubeadm join command with a token. SSH into each worker node and run the kubeadm join command to join them to the cluster.
 
-![Screenshot 2024-07-05 050335](https://github.com/shivxm03/Kubernetes-ClusterDeployment/assets/157244434/cad502b2-f5ba-49b2-9430-b3028b28960c)
+![Screenshot 2024-07-05 045426](https://github.com/shivxm03/Kubernetes-ClusterDeployment/assets/157244434/e9268e51-8a2e-499d-97ad-61914f5ed01b)
 
 Step 6: Verify the Cluster
 To verify that the cluster is up and running, SSH into the master node and run the following command:
@@ -98,7 +100,9 @@ To verify that the cluster is up and running, SSH into the master node and run t
 ```bash
 kubectl get nodes
 ```
+![Screenshot 2024-07-05 050335](https://github.com/shivxm03/Kubernetes-ClusterDeployment/assets/157244434/cad502b2-f5ba-49b2-9430-b3028b28960c)
 
-***Conclusion**
-Congratulations! You have successfully deployed a Kubernetes cluster on EC2 instances using Kubeadm. You can now start deploying and managing your containerized applications on this cluster.
+**Conclusion** <br>
+
+Congratulations! We have successfully deployed a Kubernetes cluster on EC2 instances using Kubeadm. We can now start deploying and managing your containerized applications on this cluster.
 
